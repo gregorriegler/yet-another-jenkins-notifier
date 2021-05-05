@@ -105,6 +105,16 @@ var Services = (function () {
         var result = {};
         result.oldValue = Jobs.jobs[url];
         result.newValue = Jobs.jobs[url] = data || Jobs.jobs[url] || defaultJobData(url);
+        Jobs.jobs[url].webhookUrl = result.oldValue.webhookUrl;
+        return Storage.set({jobs: Jobs.jobs}).then(function () {
+          return result;
+        });
+      },
+      add2: function (url, webhookUrl, data) {
+        var result = {};
+        result.oldValue = Jobs.jobs[url];
+        result.newValue = Jobs.jobs[url] = data || Jobs.jobs[url] || defaultJobData(url);
+        Jobs.jobs[url].webhookUrl = webhookUrl;
         return Storage.set({jobs: Jobs.jobs}).then(function () {
           return result;
         });
@@ -269,18 +279,24 @@ var Services = (function () {
       }
 
       var buildUrl = newValue.url + newValue.lastBuildNumber;
-      Notification.create(null, {
-          type: 'basic',
-          title: title + ' - ' + newValue.name,
-          message: buildUrl,
-          iconUrl: 'img/logo-' + newValue.statusIcon + '.svg'
-        },
-        {
-          onClicked: function () {
-            chrome.tabs.create({'url': buildUrl});
-          }
-        }
-      );
+
+      var req = new XMLHttpRequest();
+      req.open("POST", newValue.webhookUrl, true);
+      req.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+      req.send(JSON.stringify({ text: title + ' - ' + newValue.name + ' - ' + buildUrl }))
+
+      // Notification.create(null, {
+      //     type: 'basic',
+      //     title: title + ' - ' + newValue.name,
+      //     message: 'what' + newValue.webhookUrl,
+      //     iconUrl: 'img/logo-' + newValue.statusIcon + '.svg'
+      //   },
+      //   {
+      //     onClicked: function () {
+      //       chrome.tabs.create({'url': buildUrl});
+      //     }
+      //   }
+      // );
     }
 
     return function (promises) {

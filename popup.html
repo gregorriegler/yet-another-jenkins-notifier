@@ -34,7 +34,8 @@
             <h4>
               <span data-jobfield="name"><!--name--></span>
               <br>
-              <a class="small" target="_blank" data-joburl data-jobfield="url"><!--url--></a>
+              <a class="small" target="_blank" data-joburl data-jobfield="url"><!--url--></a><br>
+              <span class="small" data-jobfield="webhookUrl"><!--url--></span><br>
             </h4>
           </div>
         </div>
@@ -78,6 +79,8 @@
       <label class="input-group-addon" for="url">Url</label>
       <input type="url" class="form-control" id="url" name="url"
              autofocus tabindex="1" required>
+      <input type="url" class="form-control" id="webhookUrl" name="webhookUrl"
+             tabindex="1" required>
       <span class="input-group-btn">
           <button id="addButton" type="submit" class="btn btn-primary">
             <span class="glyphicon glyphicon-plus"></span>

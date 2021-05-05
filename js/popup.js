@@ -36,6 +36,7 @@
     var optionsLink = document.getElementById('optionsLink');
     var urlForm = document.getElementById('urlForm');
     var urlInput = document.getElementById('url');
+    var webhookUrlInput = document.getElementById('webhookUrl');
     var addButton = document.getElementById('addButton');
     var errorMessage = document.getElementById('errorMessage');
 
@@ -58,8 +59,10 @@
       event.preventDefault();
 
       var url = urlInput.value;
-      Jobs.add(url).then(function () {
+      var webhookUrl = webhookUrlInput.value;
+      Jobs.add2(url, webhookUrl).then(function () {
         urlInput.value = '';
+        webhookUrlInput.value = '';
       }).then(function () {
         return Jobs.updateStatus(url);
       });
